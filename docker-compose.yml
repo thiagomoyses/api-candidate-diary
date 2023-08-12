@@ -1,0 +1,27 @@
+version: '3'
+services:
+  develop_db:
+    image: mysql:latest
+    environment:
+      MYSQL_USER: laraveluser
+      MYSQL_PASSWORD: laravelpass
+      MYSQL_DATABASE: cd_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      develop_db_network: 
+        ipv4_address: 172.30.0.2
+
+volumes:
+  db_data:
+
+networks:
+  develop_db_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.0.0/16
