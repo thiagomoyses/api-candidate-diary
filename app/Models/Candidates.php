@@ -9,5 +9,5 @@ class Candidates extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'phone', 'address', 'city', 'country'];
+    protected $fillable = ['name', 'surname', 'email', 'phone', 'address', 'city', 'country', 'status'];
 }

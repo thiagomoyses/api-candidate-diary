@@ -28,6 +28,7 @@ class CandidateRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'surname' => 'required|string',
             'email' => 'required|email|unique:candidates,email',
             'phone' => 'required|string|unique:candidates,phone',
             'address' => 'required|string',

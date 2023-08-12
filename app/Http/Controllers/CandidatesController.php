@@ -17,5 +17,9 @@ class CandidatesController extends Controller
         $candidate = Candidates::create($request->all());
         return new CandidateResource($candidate);
     }
+
+    public function update(Request $request){
+        
+    }
     
 }

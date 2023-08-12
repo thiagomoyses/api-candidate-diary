@@ -16,11 +16,13 @@ class CandidateResource extends JsonResource
     {
         return [
             'name' => $this->name,
+            'surname' => $this->surname,
             'email' => $this->email,
             'phone' => $this->phone,
             'address' => $this->address,
             'city' => $this->city,
-            'country' => $this->country
+            'country' => $this->country,
+            'status' => $this->status
         ];
     }
 }
