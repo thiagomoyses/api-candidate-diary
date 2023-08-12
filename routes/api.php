@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/candidates')->group(function(){
     Route::get('/all', [\App\Http\Controllers\CandidatesController::class, 'index']);
     Route::post('/create', [\App\Http\Controllers\CandidatesController::class, 'create']);
+    Route::patch('/update/{id}', [\App\Http\Controllers\CandidatesController::class, 'update'])->where('id', '[0-9]+');
 });

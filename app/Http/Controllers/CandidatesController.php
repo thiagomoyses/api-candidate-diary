@@ -18,8 +18,10 @@ class CandidatesController extends Controller
         return new CandidateResource($candidate);
     }
 
-    public function update(Request $request){
-        
+    public function update(Request $request, $id){
+        $candidate = Candidates::findOrFail($id);
+        $candidate->update($request->all());
+
+        return $candidate;
     }
-    
 }
