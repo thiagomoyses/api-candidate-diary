@@ -22,6 +22,6 @@ class CandidatesController extends Controller
         $candidate = Candidates::findOrFail($id);
         $candidate->update($request->all());
 
-        return $candidate;
+        return new CandidateResource($candidate);
     }
 }

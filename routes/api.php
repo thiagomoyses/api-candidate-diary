@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +23,11 @@ Route::prefix('/candidates')->group(function(){
     Route::get('/all', [\App\Http\Controllers\CandidatesController::class, 'index']);
     Route::post('/create', [\App\Http\Controllers\CandidatesController::class, 'create']);
     Route::patch('/update/{id}', [\App\Http\Controllers\CandidatesController::class, 'update'])->where('id', '[0-9]+');
+});
+
+
+Route::prefix('/companies')->group(function(){
+    Route::get('/all', [\App\Http\Controllers\CompaniesController::class, 'index']);
+    Route::post('/create', [\App\Http\Controllers\CompaniesController::class, 'create']);
+    Route::patch('/update/{id}', [\App\Http\Controllers\CompaniesController::class, 'update'])->where('id', '[0-9]+');
 });
