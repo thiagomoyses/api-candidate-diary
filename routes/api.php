@@ -31,3 +31,10 @@ Route::prefix('/companies')->group(function(){
     Route::post('/create', [\App\Http\Controllers\CompaniesController::class, 'create']);
     Route::patch('/update/{id}', [\App\Http\Controllers\CompaniesController::class, 'update'])->where('id', '[0-9]+');
 });
+
+Route::prefix('/projects')->group(function() {
+    Route::get('/all', [\App\Http\Controllers\ProjectsController::class, 'index']);
+    Route::post('/create', [\App\Http\Controllers\ProjectsController::class, 'create']);
+    Route::patch('/update/{job_reference}', [\App\Http\Controllers\ProjectsController::class, 'update'])->where('job_reference', '[A-Za-z0-9]{10}');
+    Route::post('/delete/{job_reference}', [\App\Http\Controllers\ProjectsController::class, 'delete'])->where('job_reference', '[A-Za-z0-9]{10}');
+});
