@@ -38,3 +38,9 @@ Route::prefix('/projects')->group(function() {
     Route::patch('/update/{job_reference}', [\App\Http\Controllers\ProjectsController::class, 'update'])->where('job_reference', '[A-Za-z0-9]{10}');
     Route::post('/delete/{job_reference}', [\App\Http\Controllers\ProjectsController::class, 'delete'])->where('job_reference', '[A-Za-z0-9]{10}');
 });
+
+Route::prefix('/diary')->group(function (){
+    Route::get('/all', [\App\Http\Controllers\DiaryController::class, 'index']);
+    Route::post('/create', [\App\Http\Controllers\DiaryController::class, 'create']);
+    Route::patch('/update/{id}', [\App\Http\Controllers\DiaryController::class, 'update'])->where('id', '[0-9]+');
+});
