@@ -15,8 +15,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::post('/login', function(Request $request){
+    $credentials = $request->only(['email', 'password']);
+
+    if(!$token = auth('api')->attempt($credentials)){
+        abort(401);
+    }
+
+    return response()->json([
+        'data' => [
+            'token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]
+    ]);
 });
 
 Route::prefix('/candidates')->group(function(){
