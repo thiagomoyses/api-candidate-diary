@@ -10,7 +10,20 @@ use Illuminate\Http\Request;
 class DiaryController extends Controller
 {
     public function index(){
-        return DiaryResource::collection(Diary::all());
+        $diaries = Diary::with(['candidate', 'company', 'project'])->get();
+
+        return $diaries->map(function ($diary) {
+            return [
+                'id' => $diary->id,
+                'candidate_id' => $diary->candidate_id,
+                'candidate_name' => $diary->candidate->name,
+                'company_id' => $diary->company_id,
+                'company_name' => $diary->company->name,
+                'project_reference' => $diary->project_reference,
+                'project_title' => $diary->project->title,
+                'status' => $diary->status
+            ];
+        });
     }
 
     public function create(DiaryRequest $request){
