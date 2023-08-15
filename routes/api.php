@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,14 +18,15 @@ Route::middleware('api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('auth')->group(function(){
-    Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('auth.login');
-    Route::post('/signup', [\App\Http\Controllers\AuthController::class, 'signup'])->name('auth.signup');
-
-    Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
-    Route::post('/refresh', [\App\Http\Controllers\AuthController::class, 'refresh'])->name('auth.refresh');
+Route::middleware('jwt.verify')->prefix('auth')->group(function(){
+        Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
+        Route::post('/refresh', [\App\Http\Controllers\AuthController::class, 'refresh'])->name('auth.refresh');
 });
 
+Route::prefix('auth')->group(function(){
+        Route::post('/signup', [\App\Http\Controllers\AuthController::class, 'signup'])->name('auth.signup');
+        Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('auth.login');
+});
 
 Route::middleware('jwt.verify')->group(function() {
     Route::get('/dashboard', function() {

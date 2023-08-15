@@ -11,8 +11,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class AuthController extends Controller
 {
     
-    public function signup(Request $request) 
-    {
+    public function signup(Request $request) {
         $input = $request->only('name', 'email', 'password', 'c_password');
 
         $validator = Validator::make($input, [
@@ -34,8 +33,7 @@ class AuthController extends Controller
 
     }
 
-    public function login(Request $request)
-    {
+    public function login(Request $request){
         $input = $request->only('email', 'password');
 
         $validator = Validator::make($input, [
@@ -62,6 +60,16 @@ class AuthController extends Controller
         return $this->sendResponse($success, 'successful login', 200);
     }
 
+    public function logout(){
+        auth()->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function refresh(){
+        return $this->createNewToken(auth()->refresh());
+    }
+
     public function getUser() 
     {
         try {
@@ -77,9 +85,7 @@ class AuthController extends Controller
     }
 
 
-
-    public function sendResponse($data, $message, $status = 200) 
-    {
+    public function sendResponse($data, $message, $status = 200) {
         $response = [
             'data' => $data,
             'message' => $message
@@ -88,8 +94,7 @@ class AuthController extends Controller
         return response()->json($response, $status);
     }
 
-    public function sendError($errorData, $message, $status = 500)
-    {
+    public function sendError($errorData, $message, $status = 500){
         $response = [];
         $response['message'] = $message;
         if (!empty($errorData)) {
@@ -97,5 +102,14 @@ class AuthController extends Controller
         }
 
         return response()->json($response, $status);
+    }
+
+    protected function createNewToken($token){
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => auth()->user()
+        ]);
     }
 }
