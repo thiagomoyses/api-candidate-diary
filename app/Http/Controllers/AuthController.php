@@ -50,13 +50,23 @@ class AuthController extends Controller
             if (! $token = JWTAuth::attempt($input)) {
                 return $this->sendError([], "invalid login credentials", 400);
             }
+
+            // Generating a refresh token
+            $refreshToken = JWTAuth::claims(['exp' => now()->addDays(12)->timestamp])->attempt($input);
+
+            if (!$refreshToken) {
+                return $this->sendError([], "Error generating refresh token", 500);
+            }
+
         } catch (JWTException $e) {
             return $this->sendError([], $e->getMessage(), 500);
         }
 
         $success = [
             'token' => $token,
+            'refresh_token' => $refreshToken,
         ];
+        
         return $this->sendResponse($success, 'successful login', 200);
     }
 
@@ -70,8 +80,7 @@ class AuthController extends Controller
         return $this->createNewToken(auth()->refresh());
     }
 
-    public function getUser() 
-    {
+    public function getUser() {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             if (!$user) {
