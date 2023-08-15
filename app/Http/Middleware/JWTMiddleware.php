@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class JWTMiddleware
-{
+class JWTMiddleware {
     /**
      * Handle an incoming request.
      *
@@ -21,10 +20,10 @@ class JWTMiddleware
         try {
             $user = JWTAuth::parseToken()->authenticate();
             if (!$user) {
-                return response()->json(['message' => 'user not found'], 500);
+                return response()->json(['success' => false, 'reason' => 'User not found'], 404);
             }
         } catch (JWTException $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'reason' => $e->getMessage()], 401);
         }
         return $next($request);
     }
