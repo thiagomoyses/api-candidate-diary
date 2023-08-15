@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     
     public function signup(Request $request) {
-        $input = $request->only('name', 'email', 'password', 'c_password');
+        $input = $request->only('name', 'email', 'password');
 
         $validator = Validator::make($input, [
             'name' => 'required',
@@ -25,6 +25,13 @@ class AuthController extends Controller
         }
 
         $input['password'] = bcrypt($input['password']);
+
+        //Generate client_id
+        $subscriptionDate = now()->format('Ymd');
+        $randomNumber = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $input['client_id'] = $subscriptionDate . $randomNumber;
+
+
         $user = User::create($input); 
 
         $success['user'] = $user;
