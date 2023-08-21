@@ -30,6 +30,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/candidates')->group(function () {
     Route::get('/all', [\App\Http\Controllers\CandidatesController::class, 'index']);
     Route::post('/create', [\App\Http\Controllers\CandidatesController::class, 'create']);
+    Route::post('/delete/{id}', [\App\Http\Controllers\CandidatesController::class, 'delete'])->where('id', '[0-9]+');
     Route::patch('/update/{id}', [\App\Http\Controllers\CandidatesController::class, 'update'])->where('id', '[0-9]+');
 });
 
@@ -39,6 +40,7 @@ Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/candidat
 Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/companies')->group(function () {
     Route::get('/all', [\App\Http\Controllers\CompaniesController::class, 'index']);
     Route::post('/create', [\App\Http\Controllers\CompaniesController::class, 'create']);
+    Route::post('/delete/{id}', [\App\Http\Controllers\CompaniesController::class, 'delete'])->where('id', '[0-9]+');
     Route::patch('/update/{id}', [\App\Http\Controllers\CompaniesController::class, 'update'])->where('id', '[0-9]+');
 });
 
@@ -48,8 +50,8 @@ Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/companie
 Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/projects')->group(function () {
     Route::get('/all', [\App\Http\Controllers\ProjectsController::class, 'index']);
     Route::post('/create', [\App\Http\Controllers\ProjectsController::class, 'create']);
-    Route::patch('/update/{job_reference}', [\App\Http\Controllers\ProjectsController::class, 'update'])->where('job_reference', '[A-Za-z0-9]{10}');
     Route::post('/delete/{job_reference}', [\App\Http\Controllers\ProjectsController::class, 'delete'])->where('job_reference', '[A-Za-z0-9]{10}');
+    Route::patch('/update/{job_reference}', [\App\Http\Controllers\ProjectsController::class, 'update'])->where('job_reference', '[A-Za-z0-9]{10}');
 });
 
 /**
@@ -58,5 +60,6 @@ Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/projects
 Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/diary')->group(function () {
     Route::get('/all', [\App\Http\Controllers\DiaryController::class, 'index']);
     Route::post('/create', [\App\Http\Controllers\DiaryController::class, 'create']);
+    Route::post('/delete/{id}', [\App\Http\Controllers\DiaryController::class, 'delete'])->where('id', '[0-9]+');
     Route::patch('/update/{id}', [\App\Http\Controllers\DiaryController::class, 'update'])->where('id', '[0-9]+');
 });

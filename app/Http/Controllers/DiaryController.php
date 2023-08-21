@@ -37,7 +37,21 @@ class DiaryController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => 'internal error'], 500);
         }
-    }    
+    }
+
+    public function delete(Request $request, $id){
+        try {
+            $diary = Diary::where('id', $id)->where('client_id_fk', $request->input('client_id_fk'))->first();
+            if($diary){
+                $diary->delete();
+                return response()->json(["message" => "Diary Deleted"], 200);
+            }else{
+                return response()->json(['error' => 'Diary not found!'], 404);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'internal error'], 500);
+        }
+    }
 
     public function create(DiaryRequest $request){
         try {
@@ -78,5 +92,4 @@ class DiaryController extends Controller
             return response()->json(['error' => 'internal error'], 500);
         }
     }
-    
 }
