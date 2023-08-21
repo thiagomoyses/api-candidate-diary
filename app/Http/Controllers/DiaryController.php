@@ -71,6 +71,7 @@ class DiaryController extends Controller
                           ->first();
     
             if ($diary) {
+
                 $diary->update($request->all());
     
                 $diary->load(['candidate', 'company', 'project']);
