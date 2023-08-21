@@ -40,8 +40,8 @@ class CandidatesController extends Controller
             if($candidate){
                 $candidate->delete();
 
-                $mailCandidate = new SendEmailController("thiagobudismo@gmail.com", "Thiago", "teste@teste.com", "Feedback", "Fala parcero, mano, voce nao passo", "Thiagaooo");
-                $mailCandidate->send();
+                // $mailCandidate = new SendEmailController("thiagobudismo@gmail.com", "Thiago", "teste@teste.com", "Feedback", "Fala parcero, mano, voce nao passo", "Thiagaooo");
+                // $mailCandidate->send();
                 
                 return response()->json(["message" => "Candidate Deleted"], 200);
             }else{
