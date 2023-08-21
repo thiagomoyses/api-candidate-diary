@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,6 +18,13 @@ class ExtractClientIdFromToken
 
             if (isset($user->client_id)) {
                 $request->merge(['client_id_fk' => $user->client_id]);
+            }
+
+            $user = User::where('client_id', $user->client_id)->first();
+
+            if($user){
+                $request->merge(['client_name' => $user->name]);
+                $request->merge(['client_email' => $user->email]);
             }
             
             return $next($request);
