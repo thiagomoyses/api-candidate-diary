@@ -6,6 +6,7 @@ use App\Http\Requests\CandidateRequest;
 use App\Http\Resources\CandidateResource;
 use App\Models\Candidates;
 use Illuminate\Http\Request;
+use App\Http\Controllers\SendEmailController;
 
 class CandidatesController extends Controller
 {
@@ -40,12 +41,14 @@ class CandidatesController extends Controller
                 $candidate->delete();
 
                 $mailCandidate = new SendEmailController("thiagobudismo@gmail.com", "Thiago", "teste@teste.com", "Feedback", "Fala parcero, mano, voce nao passo", "Thiagaooo");
+                $mailCandidate->send();
+                
                 return response()->json(["message" => "Candidate Deleted"], 200);
             }else{
                 return response()->json(['error' => 'Candidate not found!'], 404);
             }
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'internal error'], 500);
+            return response()->json(['error' => 'ainnn messi error'], 500);
         }
     }
 
