@@ -52,7 +52,7 @@ class ProjectsController extends Controller
             $project = Projects::where('job_reference', $job_reference)->where('client_id_fk', $request->input('client_id_fk'))->first();
             if($project){
                 $project->delete();
-                return response()->json(["message" => "Project Deleted"]);
+                return response()->json(["message" => "Project Deleted"], 200);
             }else{
                 return response()->json(['error' => 'Project not found!'], 404);
             }

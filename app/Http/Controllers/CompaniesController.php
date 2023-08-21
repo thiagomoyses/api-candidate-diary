@@ -31,6 +31,20 @@ class CompaniesController extends Controller
         }
     }
 
+    public function delete(Request $request, $id){
+        try {
+            $company = Companies::where('id', $id)->where('client_id_fk', $request->input('client_id_fk'))->first();
+            if($company){
+                $company->delete();
+                return response()->json(["message" => "Company Deleted"], 200);
+            }else{
+                return response()->json(['error' => 'Company not found!'], 404);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'internal error'], 500);
+        }
+    }
+
     public function update(Request $request, $id){
         try {
             $company = Companies::where('id', $id)->where('client_id_fk', $request->input('client_id_fk'))->first();

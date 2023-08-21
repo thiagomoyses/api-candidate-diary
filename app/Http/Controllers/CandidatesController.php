@@ -33,6 +33,20 @@ class CandidatesController extends Controller
         }
     }
 
+    public function delete(Request $request, $id){
+        try {
+            $candidate = Candidates::where('id', $id)->where('client_id_fk', $request->input('client_id_fk'))->first();
+            if($candidate){
+                $candidate->delete();
+                return response()->json(["message" => "Candidate Deleted"], 200);
+            }else{
+                return response()->json(['error' => 'Candidate not found!'], 404);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'internal error'], 500);
+        }
+    }
+
     public function update(Request $request, $id){
         try {
             $candidate = Candidates::where('id', $id)->where('client_id_fk', $request->input('client_id_fk'))->first();
@@ -40,7 +54,7 @@ class CandidatesController extends Controller
                 $candidate->update($request->all());
                 return new CandidateResource($candidate);
             }else{
-                return response()->json(['error' => 'user not found!'], 404);
+                return response()->json(['error' => 'Candidate not found!'], 404);
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => 'internal error'], 500);
