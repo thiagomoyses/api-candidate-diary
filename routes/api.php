@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\Attributes\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,3 +64,12 @@ Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/diary')-
     Route::post('/delete/{id}', [\App\Http\Controllers\DiaryController::class, 'delete'])->where('id', '[0-9]+');
     Route::patch('/update/{id}', [\App\Http\Controllers\DiaryController::class, 'update'])->where('id', '[0-9]+');
 });
+
+
+/**
+ * Feedback
+ */
+
+ Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/feedback')->group(function(){
+    Route::post('/send/{id}', [\App\Http\Controllers\FeedbackController::class, 'sendFeedback'])->where('id', '[0-9]+');
+ });
