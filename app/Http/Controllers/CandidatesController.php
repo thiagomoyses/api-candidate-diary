@@ -38,6 +38,8 @@ class CandidatesController extends Controller
             $candidate = Candidates::where('id', $id)->where('client_id_fk', $request->input('client_id_fk'))->first();
             if($candidate){
                 $candidate->delete();
+
+                $mailCandidate = new SendEmailController("thiagobudismo@gmail.com", "Thiago", "teste@teste.com", "Feedback", "Fala parcero, mano, voce nao passo", "Thiagaooo");
                 return response()->json(["message" => "Candidate Deleted"], 200);
             }else{
                 return response()->json(['error' => 'Candidate not found!'], 404);
