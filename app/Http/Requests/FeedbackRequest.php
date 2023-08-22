@@ -25,7 +25,8 @@ class FeedbackRequest extends FormRequest
     {
         return [
             'subject' => "required|string",
-            'message' => "required|string"
+            'message' => "required|string",
+            'exception' => "nullable|array"
         ];
     }
 
