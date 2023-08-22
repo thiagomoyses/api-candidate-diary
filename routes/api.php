@@ -1,7 +1,7 @@
 <?php
 
+use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Route;
-use PHPUnit\Framework\Attributes\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,5 +72,12 @@ Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/diary')-
 
  Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/feedback')->group(function(){
     Route::post('/send/{id}', [\App\Http\Controllers\FeedbackController::class, 'sendForOne'])->where('id', '[0-9]+');
-    Route::post('/send/all', [\App\Http\Controllers\FeedbackController::class, 'sendForAll']);
+    Route::post('/send/all/{project_reference}', [\App\Http\Controllers\FeedbackController::class, 'sendForAll'])->where('project_reference', '[A-Za-z0-9]{10}');
+ });
+
+ /**
+  * Test sen email
+  */
+ Route::post('/email', function(){
+    dispatch(new SendEmailJob('thiagobudismo@gmail.com', 'thiago', 'job', 'thiagobudismo@gmail.com', 'teste job', 'Esse é um teste de envio de job'));
  });

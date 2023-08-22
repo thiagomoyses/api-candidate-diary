@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FeedbackRequest;
+use App\Jobs\SendEmailJob;
 use App\Models\Candidates;
+use App\Models\Diary;
 
 class FeedbackController extends Controller
 {
@@ -13,14 +15,13 @@ class FeedbackController extends Controller
             $candidate = Candidates::where('id', $id)->where('client_id_fk', $request->input('client_id_fk'))->first();
             if ($candidate) {
                 $mailTo = $candidate->email;
-                $nameMail = $candidate->name;
+                $nameMailTo = $candidate->name;
                 $fromName = $request->input('client_name');
                 $fromEmail = $request->input('client_email');
                 $emailSubject = $request->input('subject');
                 $message = $request->input('message');
 
-                $feedback = new SendEmailController($mailTo, $fromName, $fromEmail, $emailSubject, $message, $nameMail);
-                $feedback->send();
+                dispatch(new SendEmailJob($mailTo, $nameMailTo, $fromName, $fromEmail, $emailSubject, $message));
 
                 return response()->json(['success' => true, "reason" => "Feedback sent!"], 200);
                 
@@ -32,33 +33,34 @@ class FeedbackController extends Controller
         }
     }
 
-    public function sendForAll(FeedbackRequest $request){
+    public function sendForAll(FeedbackRequest $request, $project_reference){
+        //check if exist emails on exception condition
+        $exceptEmails = [];
+
         if($request->has('exception')){
             if(!empty($request->input('exception'))){
                 $exceptEmails = $request->input('exception');
             }
         }
 
-        if(isset($exceptEmails)){
-            $candidateEmails = Candidates::where('client_id_fk', $request->input('client_id_fk'))
-            ->whereNotIn('email', $exceptEmails)
-            ->get();
-        }else{
-            $candidateEmails = Candidates::where('client_id_fk', $request->input('client_id_fk'));
+        $diaries = Diary::where('project_reference', $project_reference)->get();
+        $candidateIds = $diaries->pluck('candidate_id');
+        $candidates = Candidates::whereIn('id', $candidateIds)->get();
+
+        foreach($candidates as $candidate){
+            if(!in_array($candidate->email, $exceptEmails)){
+                dispatch(new SendEmailJob(
+                    $candidate->email,
+                    $candidate->name,
+                    $request->input('client_name'),
+                    $request->input('client_email'),
+                    $request->input('subject'),
+                    $request->input('message')
+                ));
+            }
         }
 
-        //send all emails
-        foreach($candidateEmails as $candidate){
-            $feedback = new SendEmailController(
-                $candidate->email,
-                $request->input('client_name'),
-                $request->input('client_email'),
-                $request->input('subject'),
-                $request->input('message'),
-                $candidate->name
-            );
-            $feedback->send();
-        }
+        return response()->json(['status' => true, "reason" => "Emails sent!"], 200);
 
     }
 }

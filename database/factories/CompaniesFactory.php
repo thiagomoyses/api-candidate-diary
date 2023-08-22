@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Candidates>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Companies>
  */
-class CandidatesFactory extends Factory
+class CompaniesFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,13 +18,11 @@ class CandidatesFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'phone' => $this->faker->tollFreePhoneNumber,
-            'email' => $this->faker->unique()->email,
             'address' => $this->faker->streetAddress(),
             'city' => $this->faker->city(),
             'country' => $this->faker->country(),
-            'surname' => $this->faker->lastName(),
-            'situation' => 1,
+            'email' => $this->faker->unique()->email,
+            'phone' => $this->faker->tollFreePhoneNumber,
             'client_id_fk' => '20230822279557'
         ];
     }
