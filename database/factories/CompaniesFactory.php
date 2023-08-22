@@ -23,7 +23,7 @@ class CompaniesFactory extends Factory
             'country' => $this->faker->country(),
             'email' => $this->faker->unique()->email,
             'phone' => $this->faker->tollFreePhoneNumber,
-            'client_id_fk' => '20230821294849'
+            'client_id_fk' => '20230822279557'
         ];
     }
 }

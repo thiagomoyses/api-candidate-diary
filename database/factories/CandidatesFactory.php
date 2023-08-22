@@ -25,7 +25,7 @@ class CandidatesFactory extends Factory
             'country' => $this->faker->country(),
             'surname' => $this->faker->lastName(),
             'situation' => 1,
-            'client_id_fk' => '20230821294849'
+            'client_id_fk' => '20230822279557'
         ];
     }
 }

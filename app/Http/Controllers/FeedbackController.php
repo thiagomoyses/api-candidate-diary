@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FeedbackRequest;
 use App\Jobs\SendEmailJob;
 use App\Models\Candidates;
+use App\Models\Diary;
 
 class FeedbackController extends Controller
 {
@@ -32,34 +33,34 @@ class FeedbackController extends Controller
         }
     }
 
-    public function sendForAll(FeedbackRequest $request, $job_reference){
+    public function sendForAll(FeedbackRequest $request, $project_reference){
+        //check if exist emails on exception condition
+        $exceptEmails = [];
+
         if($request->has('exception')){
             if(!empty($request->input('exception'))){
                 $exceptEmails = $request->input('exception');
             }
         }
 
-        if(isset($exceptEmails)){
-            //verificar em diary os candidatos com aquele job reference
-            $candidateEmails = Candidates::where('client_id_fk', $request->input('client_id_fk'))
-            ->whereNotIn('email', $exceptEmails)
-            ->get();
-        }else{
-            $candidateEmails = Candidates::where('client_id_fk', $request->input('client_id_fk'));
+        $diaries = Diary::where('project_reference', $project_reference)->get();
+        $candidateIds = $diaries->pluck('candidate_id');
+        $candidates = Candidates::whereIn('id', $candidateIds)->get();
+
+        foreach($candidates as $candidate){
+            if(!in_array($candidate->email, $exceptEmails)){
+                dispatch(new SendEmailJob(
+                    $candidate->email,
+                    $candidate->name,
+                    $request->input('client_name'),
+                    $request->input('client_email'),
+                    $request->input('subject'),
+                    $request->input('message')
+                ));
+            }
         }
 
-        //send all emails
-        foreach($candidateEmails as $candidate){
-            $feedback = new SendEmailController(
-                $candidate->email,
-                $request->input('client_name'),
-                $request->input('client_email'),
-                $request->input('subject'),
-                $request->input('message'),
-                $candidate->name
-            );
-            $feedback->send();
-        }
+        return response()->json(['status' => true, "reason" => "Emails sent!"], 200);
 
     }
 }

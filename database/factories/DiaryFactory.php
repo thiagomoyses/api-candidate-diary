@@ -17,7 +17,11 @@ class DiaryFactory extends Factory
     public function definition(): array
     {
         return [
-            
+            "candidate_id" => rand(1, 10),
+            "company_id" => rand(1, 10),
+            "project_reference" => "RsZLYn9v9v",
+            "status" => 1,
+            "client_id_fk" => "20230822279557"
         ];
     }
 }
