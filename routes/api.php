@@ -72,7 +72,7 @@ Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/diary')-
 
  Route::middleware(['jwt.verify', 'ExtractClientIdFromToken'])->prefix('/feedback')->group(function(){
     Route::post('/send/{id}', [\App\Http\Controllers\FeedbackController::class, 'sendForOne'])->where('id', '[0-9]+');
-    Route::post('/send/all', [\App\Http\Controllers\FeedbackController::class, 'sendForAll']);
+    Route::post('/send/all/{job_reference}', [\App\Http\Controllers\FeedbackController::class, 'sendForAll'])->where('job_reference', '[A-Za-z0-9]{10}');
  });
 
  /**
