@@ -17,7 +17,7 @@ Make sure you have the following tools installed before setting up the project:
 1. Clone this repository to your local machine:
 
    ```sh
-   git clone https://github.com/your-username/api-candidate-diary.git
+   git clone https://github.com/thiagomoyses/api-candidate-diary.git
    cd api-candidate-diary
 
 2. Start the database using Docker Compose:
